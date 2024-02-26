@@ -219,4 +219,47 @@ describe("SignUpController", () => {
       password: "123",
     });
   });
+
+  test("should return error when addAccount fails ", () => {
+    const { sut, addAccountStub } = makeSut();
+    jest.spyOn(addAccountStub, "add").mockImplementationOnce(() => {
+      throw new Error();
+    });
+    const httpRequest = {
+      body: {
+        name: "teste",
+        email: "invalid@gmail.com",
+        password: "123",
+        passwordConfirmation: "123",
+      },
+    };
+
+    const response = sut.handle(httpRequest);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toEqual(new ServerError());
+  });
+
+  test("should return 200 if values is valid", () => {
+    const { sut } = makeSut();
+
+    const httpRequest = {
+      body: {
+        name: "any",
+        email: "any@gmail.com",
+        password: "123",
+        passwordConfirmation: "123",
+      },
+    };
+
+    const response = sut.handle(httpRequest);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual({
+      id: "1",
+      name: "any",
+      email: "any@gmail.com",
+      password: "123",
+    });
+  });
 });

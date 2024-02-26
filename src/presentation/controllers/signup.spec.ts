@@ -1,13 +1,10 @@
+import { AddAccount, AddAccountModel } from "../../domain/useCases/add-account";
+import { AccountModel } from "../../domain/models/account";
 import { InvalidParamError, MissingParamError, ServerError } from "../error";
 import { EmailValidator } from "../protocols";
 import { SignUpController } from "./signup";
 
 describe("SignUpController", () => {
-  interface SubTypes {
-    sut: SignUpController;
-    emailValidatorStub: EmailValidator;
-  }
-
   const makeEmailValidator = () => {
     class EmailValidatorStub implements EmailValidator {
       isValid(email: string): boolean {
@@ -18,13 +15,38 @@ describe("SignUpController", () => {
     return new EmailValidatorStub();
   };
 
+  const makeAddAcount = (): AddAccount => {
+    class AddAccountStub implements AddAccount {
+      add(account: AddAccountModel): AccountModel {
+        const fakeAccount = {
+          id: "1",
+          name: "any",
+          email: "any@gmail.com",
+          password: "123",
+        };
+
+        return fakeAccount;
+      }
+    }
+
+    return new AddAccountStub();
+  };
+
+  interface SubTypes {
+    sut: SignUpController;
+    emailValidatorStub: EmailValidator;
+    addAccountStub: AddAccount;
+  }
+
   const makeSut = (): SubTypes => {
     const emailValidatorStub = makeEmailValidator();
-    const sut = new SignUpController(emailValidatorStub);
+    const addAccountStub = makeAddAcount();
+    const sut = new SignUpController(emailValidatorStub, addAccountStub);
 
     return {
       sut,
       emailValidatorStub,
+      addAccountStub,
     };
   };
 
@@ -172,5 +194,26 @@ describe("SignUpController", () => {
 
     expect(response.statusCode).toBe(500);
     expect(response.body).toEqual(new ServerError());
+  });
+
+  test("should call addAccount", () => {
+    const { sut, addAccountStub } = makeSut();
+    const addSpy = jest.spyOn(addAccountStub, "add");
+
+    const httpRequest = {
+      body: {
+        name: "any",
+        email: "any@gmail.com",
+        password: "123",
+        passwordConfirmation: "123",
+      },
+    };
+
+    sut.handle(httpRequest);
+    expect(addSpy).toHaveBeenCalledWith({
+      name: "any",
+      email: "any@gmail.com",
+      password: "123",
+    });
   });
 });

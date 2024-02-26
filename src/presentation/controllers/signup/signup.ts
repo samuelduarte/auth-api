@@ -1,5 +1,5 @@
 import { InvalidParamError, MissingParamError } from "../../error";
-import { BadRequest, ServerErrorInternal } from "../../helpers/http-helper";
+import { BadRequest, ServerErrorInternal, ok } from "../../helpers/http-helper";
 import {
   Controller,
   EmailValidator,
@@ -43,10 +43,7 @@ export class SignUpController implements Controller {
         password,
       });
 
-      return {
-        body: account,
-        statusCode: 200,
-      };
+      return ok(account);
     } catch (error) {
       return ServerErrorInternal();
     }

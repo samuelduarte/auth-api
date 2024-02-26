@@ -7,6 +7,6 @@ export const BadRequest = (error: Error): HttpResponse => ({
 });
 
 export const ServerErrorInternal = (): HttpResponse => ({
-  statusCode: 400,
+  statusCode: 500,
   body: new ServerError(),
 });

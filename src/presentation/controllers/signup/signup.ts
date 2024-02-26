@@ -13,7 +13,7 @@ export class SignUpController implements Controller {
     private readonly emailValidator: EmailValidator,
     private readonly addAccount: AddAccount
   ) {}
-  handle(httpRequest: HttpRequest): HttpResponse {
+  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const requiredFiels = [
         "name",
@@ -37,7 +37,7 @@ export class SignUpController implements Controller {
         return BadRequest(new InvalidParamError("email"));
       }
 
-      const account = this.addAccount.add({
+      const account = await this.addAccount.add({
         email,
         name,
         password,

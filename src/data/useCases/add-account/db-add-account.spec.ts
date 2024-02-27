@@ -91,4 +91,20 @@ describe("DbAddAccount", () => {
       password: "hashed_value",
     });
   });
+
+  test("Should return error when AddAccountRepository throws", async () => {
+    const { addAccountRepositoryStub, sut } = makeSut();
+    jest
+      .spyOn(addAccountRepositoryStub, "add")
+      .mockReturnValueOnce(
+        new Promise((resolve, reject) => reject(new Error()))
+      );
+    const data = {
+      name: "valid",
+      email: "valid@gmail.com",
+      password: "valid_password",
+    };
+    const promise = sut.add(data);
+    await expect(promise).rejects.toThrow();
+  });
 });

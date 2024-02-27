@@ -107,4 +107,20 @@ describe("DbAddAccount", () => {
     const promise = sut.add(data);
     await expect(promise).rejects.toThrow();
   });
+
+  test("Should call add on addAccountRepository with success", async () => {
+    const { sut } = makeSut();
+    const data = {
+      name: "valid",
+      email: "valid@gmail.com",
+      password: "valid_password",
+    };
+    const response = await sut.add(data);
+    expect(response).toEqual({
+      id: "valid_id",
+      name: "valid",
+      email: "valid@gmail.com",
+      password: "hashed_value",
+    });
+  });
 });

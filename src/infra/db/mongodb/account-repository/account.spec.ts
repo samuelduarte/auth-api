@@ -10,8 +10,17 @@ describe("Account Mongo Repository", () => {
     await MongoHelper.disconnet();
   });
 
+  beforeEach(() => {
+    const accounts = MongoHelper.getColletion("accounts");
+    accounts.deleteMany({});
+  });
+
+  const makeSut = (): AccountMongoRepository => {
+    return new AccountMongoRepository();
+  };
+
   test("should return success", async () => {
-    const sut = new AccountMongoRepository();
+    const sut = makeSut();
 
     const account = await sut.add({
       name: "valid",

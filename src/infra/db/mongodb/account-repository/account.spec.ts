@@ -1,4 +1,5 @@
 import { MongoHelper } from "../helpers/helper-mongo";
+import { AccountMongoRepository } from "./account";
 
 describe("Account Mongo Repository", () => {
   beforeAll(async () => {
@@ -9,7 +10,7 @@ describe("Account Mongo Repository", () => {
     await MongoHelper.disconnet();
   });
 
-  test("should return success", () => {
+  test("should return success", async () => {
     const sut = new AccountMongoRepository();
 
     const account = await sut.add({

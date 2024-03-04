@@ -1,7 +1,6 @@
-import { Authentication } from "../../../domain/useCases/authentication";
+import { Authentication, EmailValidator } from "../login/login-protocols";
 import { MissingParamError } from "../../error";
-import { BadRequest } from "../../helpers/http-helper";
-import { EmailValidator, HttpRequest } from "../../protocols";
+import { BadRequest, unauthorized } from "../../helpers/http-helper";
 import { LoginController } from "./login";
 
 describe("LoginController", () => {
@@ -87,5 +86,20 @@ describe("LoginController", () => {
       },
     });
     expect(authSpy).toHaveBeenCalledWith("123@gmail.com", "any_password");
+  });
+
+  test("Should return error when accessToken is null", async () => {
+    const { sut, authentication } = makeSut();
+    jest
+      .spyOn(authentication, "auth")
+      .mockReturnValueOnce(new Promise((resolve) => resolve(null)));
+
+    const response = await sut.handle({
+      body: {
+        email: "123@gmail.com",
+        password: "any_password",
+      },
+    });
+    expect(response).toEqual(unauthorized());
   });
 });

@@ -1,6 +1,6 @@
 import { Authentication, EmailValidator } from "../login/login-protocols";
 import { MissingParamError } from "../../error";
-import { BadRequest, unauthorized } from "../../helpers/http-helper";
+import { BadRequest, ok, unauthorized } from "../../helpers/http-helper";
 import { LoginController } from "./login";
 
 describe("LoginController", () => {
@@ -101,5 +101,16 @@ describe("LoginController", () => {
       },
     });
     expect(response).toEqual(unauthorized());
+  });
+
+  test("Should return 200 when accessToken is valid", async () => {
+    const { sut } = makeSut();
+    const response = await sut.handle({
+      body: {
+        email: "123@gmail.com",
+        password: "any_password",
+      },
+    });
+    expect(response).toEqual(ok({ accessToken: "any_token" }));
   });
 });

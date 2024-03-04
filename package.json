@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "sucrase-node src/main/server.ts",
+    "start": "sucrase-node src/main/config/server.ts",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand --detectOpenHandles",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
@@ -21,6 +21,7 @@
     "@types/jest": "^29.5.12",
     "@types/mongodb": "^4.0.7",
     "@types/node": "^20.11.19",
+    "@types/supertest": "^6.0.2",
     "@types/validator": "^13.11.9",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "eslint": "^8.0.1",
@@ -36,7 +37,9 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
     "express": "^4.18.3",
+    "fast-glob": "^3.3.2",
     "mongodb": "^6.4.0",
     "validator": "^13.11.0"
   }

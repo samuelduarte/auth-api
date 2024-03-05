@@ -1,0 +1,1 @@
+API com uma arquitetura bem definida e desacoplada, utilizando TDD (programação orientada a testes) como metodologia de trabalho, Clean Architecture para fazer a distribuição de responsabilidades em camadas, seguindo os princípios do SOLID e, aplicando Design Patterns para resolver alguns problemas comuns.

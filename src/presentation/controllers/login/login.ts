@@ -43,6 +43,8 @@ export class LoginController implements Controller {
 
       return ok({ accessToken });
     } catch (error) {
+      console.log("Error", error);
+
       throw ServerErrorInternal();
     }
   }
